@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'register' | 'list'>('register')
-  const [selectedAffiliate, setSelectedAffiliate] = useState<any>(null)
+  const [selectedAffiliates, setSelectedAffiliates] = useState<any[] | null>(null)
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -71,16 +71,19 @@ export default function Home() {
             {activeTab === 'register' ? (
               <AffiliationForm />
             ) : (
-              <AffiliatesTable onSelect={setSelectedAffiliate} />
+              <AffiliatesTable
+                onSelect={(affiliate) => setSelectedAffiliates([affiliate])}
+                onBulkSelect={(affiliates) => setSelectedAffiliates(affiliates)}
+              />
             )}
           </div>
         </main>
 
         {/* Print Modal */}
-        {selectedAffiliate && (
+        {selectedAffiliates && (
           <PrintView
-            affiliate={selectedAffiliate}
-            onClose={() => setSelectedAffiliate(null)}
+            affiliates={selectedAffiliates}
+            onClose={() => setSelectedAffiliates(null)}
           />
         )}
 

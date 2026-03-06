@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { Printer, X, Download, User, MapPin, CreditCard } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface Affiliate {
     dni: string
@@ -15,11 +16,11 @@ interface Affiliate {
 }
 
 interface PrintViewProps {
-    affiliate: Affiliate
+    affiliates: Affiliate[]
     onClose: () => void
 }
 
-export default function PrintView({ affiliate, onClose }: PrintViewProps) {
+export default function PrintView({ affiliates, onClose }: PrintViewProps) {
     const handlePrint = () => {
         window.print()
     }
@@ -51,71 +52,80 @@ export default function PrintView({ affiliate, onClose }: PrintViewProps) {
                 </div>
 
                 {/* Printable Area */}
-                <div id="printable-area" className="p-12 md:p-16 print:p-8 print:w-[210mm] print:mx-auto">
-                    {/* Header */}
-                    <div className="flex justify-between items-start border-b-2 border-slate-800 pb-2 mb-4">
-                        <div>
-                            <h1 className="text-xl font-black text-slate-900 uppercase tracking-tighter">FICHA DE ADHESION</h1>
-                        </div>
-                        <div className="text-right border-l-4 border-blue-500 pl-4">
-                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none mb-0.5">DNI IDENTIFICADOR</p>
-                            <p className="text-xl font-black text-slate-900 font-mono tracking-tighter">{affiliate.dni}</p>
-                        </div>
-                    </div>
+                <div id="printable-area" className="flex flex-col gap-0 print:block">
+                    {affiliates.map((affiliate, index) => (
+                        <div
+                            key={affiliate.dni}
+                            className={cn(
+                                "p-12 md:p-16 print:p-8 print:w-[210mm] print:mx-auto bg-white",
+                                index > 0 && "print:break-before-page border-t md:border-t-0 border-slate-100"
+                            )}
+                        >
+                            {/* Header */}
+                            <div className="flex justify-between items-start border-b-2 border-slate-800 pb-2 mb-4">
+                                <div>
+                                    <h1 className="text-xl font-black text-slate-900 uppercase tracking-tighter">FICHA DE ADHESION</h1>
+                                </div>
+                                <div className="text-right border-l-4 border-blue-500 pl-4">
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none mb-0.5">DNI IDENTIFICADOR</p>
+                                    <p className="text-xl font-black text-slate-900 font-mono tracking-tighter">{affiliate.dni}</p>
+                                </div>
+                            </div>
 
-                    {/* Personal Data Grid */}
-                    <div className="grid grid-cols-2 gap-y-4 gap-x-12 mb-6">
-                        <div>
-                            <p className="text-[9px] font-bold text-blue-600 uppercase tracking-widest mb-0.5 flex items-center gap-1.5">
-                                <User size={8} strokeWidth={3} />
-                                Nombre y Apellido
-                            </p>
-                            <p className="text-base font-bold text-slate-800 border-b border-slate-100 pb-0.5">{affiliate.nombre_apellido}</p>
-                        </div>
-                        <div>
-                            <p className="text-[9px] font-bold text-blue-600 uppercase tracking-widest mb-0.5 flex items-center gap-1.5">
-                                <CreditCard size={8} strokeWidth={3} />
-                                Documento (DNI)
-                            </p>
-                            <p className="text-base font-bold text-slate-800 border-b border-slate-100 pb-0.5">{affiliate.dni}</p>
-                        </div>
-                        <div>
-                            <p className="text-[9px] font-bold text-blue-600 uppercase tracking-widest mb-0.5">Nombre del Padre</p>
-                            <p className="text-base font-bold text-slate-800 border-b border-slate-100 pb-0.5">{affiliate.nombre_padre}</p>
-                        </div>
-                        <div>
-                            <p className="text-[9px] font-bold text-blue-600 uppercase tracking-widest mb-0.5">Nombre de la Madre</p>
-                            <p className="text-base font-bold text-slate-800 border-b border-slate-100 pb-0.5">{affiliate.nombre_madre}</p>
-                        </div>
-                        <div className="col-span-2">
-                            <p className="text-[9px] font-bold text-blue-600 uppercase tracking-widest mb-0.5 flex items-center gap-1.5">
-                                <MapPin size={8} strokeWidth={3} />
-                                Domicilio y Localidad
-                            </p>
-                            <p className="text-base font-bold text-slate-800 border-b border-slate-100 pb-0.5">
-                                {affiliate.domicilio}, {affiliate.localidad}
-                            </p>
-                        </div>
-                    </div>
+                            {/* Personal Data Grid */}
+                            <div className="grid grid-cols-2 gap-y-4 gap-x-12 mb-6">
+                                <div>
+                                    <p className="text-[9px] font-bold text-blue-600 uppercase tracking-widest mb-0.5 flex items-center gap-1.5">
+                                        <User size={8} strokeWidth={3} />
+                                        Nombre y Apellido
+                                    </p>
+                                    <p className="text-base font-bold text-slate-800 border-b border-slate-100 pb-0.5">{affiliate.nombre_apellido}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[9px] font-bold text-blue-600 uppercase tracking-widest mb-0.5 flex items-center gap-1.5">
+                                        <CreditCard size={8} strokeWidth={3} />
+                                        Documento (DNI)
+                                    </p>
+                                    <p className="text-base font-bold text-slate-800 border-b border-slate-100 pb-0.5">{affiliate.dni}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[9px] font-bold text-blue-600 uppercase tracking-widest mb-0.5">Nombre del Padre</p>
+                                    <p className="text-base font-bold text-slate-800 border-b border-slate-100 pb-0.5">{affiliate.nombre_padre}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[9px] font-bold text-blue-600 uppercase tracking-widest mb-0.5">Nombre de la Madre</p>
+                                    <p className="text-base font-bold text-slate-800 border-b border-slate-100 pb-0.5">{affiliate.nombre_madre}</p>
+                                </div>
+                                <div className="col-span-2">
+                                    <p className="text-[9px] font-bold text-blue-600 uppercase tracking-widest mb-0.5 flex items-center gap-1.5">
+                                        <MapPin size={8} strokeWidth={3} />
+                                        Domicilio y Localidad
+                                    </p>
+                                    <p className="text-base font-bold text-slate-800 border-b border-slate-100 pb-0.5">
+                                        {affiliate.domicilio}, {affiliate.localidad}
+                                    </p>
+                                </div>
+                            </div>
 
-                    {/* DNI Photos */}
-                    <div className="space-y-6">
-                        <div className="bg-slate-50 rounded-lg overflow-hidden border border-slate-100 flex items-center justify-center p-2">
-                            <img
-                                src={affiliate.dni_frente_url}
-                                alt="DNI Frente"
-                                className="max-h-[260px] w-auto object-contain rounded shadow-sm"
-                            />
+                            {/* DNI Photos */}
+                            <div className="space-y-6">
+                                <div className="bg-slate-50 rounded-lg overflow-hidden border border-slate-100 flex items-center justify-center p-2">
+                                    <img
+                                        src={affiliate.dni_frente_url}
+                                        alt="DNI Frente"
+                                        className="max-h-[260px] w-auto object-contain rounded shadow-sm"
+                                    />
+                                </div>
+                                <div className="bg-slate-50 rounded-lg overflow-hidden border border-slate-100 flex items-center justify-center p-2">
+                                    <img
+                                        src={affiliate.dni_dorso_url}
+                                        alt="DNI Dorso"
+                                        className="max-h-[260px] w-auto object-contain rounded shadow-sm"
+                                    />
+                                </div>
+                            </div>
                         </div>
-                        <div className="bg-slate-50 rounded-lg overflow-hidden border border-slate-100 flex items-center justify-center p-2">
-                            <img
-                                src={affiliate.dni_dorso_url}
-                                alt="DNI Dorso"
-                                className="max-h-[260px] w-auto object-contain rounded shadow-sm"
-                            />
-                        </div>
-                    </div>
-
+                    ))}
                 </div>
 
                 <style jsx global>{`

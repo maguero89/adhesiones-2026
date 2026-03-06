@@ -28,6 +28,7 @@ export default function AffiliationForm() {
     const [dniDorso, setDniDorso] = useState<File | null>(null)
     const [loading, setLoading] = useState(false)
     const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null)
+    const [resetKey, setResetKey] = useState(0)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -82,6 +83,7 @@ export default function AffiliationForm() {
             setFormData({ dni: '', nombre_apellido: '', nombre_padre: '', nombre_madre: '', domicilio: '', localidad: '' })
             setDniFrente(null)
             setDniDorso(null)
+            setResetKey(prev => prev + 1)
         } catch (err: any) {
             setStatus({ type: 'error', message: err.message || 'Error al guardar los datos.' })
         } finally {
@@ -217,10 +219,12 @@ export default function AffiliationForm() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <ImageUpload
+                            key={`frente-${resetKey}`}
                             label="DNI Frente"
                             onImageSelected={setDniFrente}
                         />
                         <ImageUpload
+                            key={`dorso-${resetKey}`}
                             label="DNI Dorso"
                             onImageSelected={setDniDorso}
                         />
